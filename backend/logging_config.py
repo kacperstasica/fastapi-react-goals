@@ -22,8 +22,11 @@ def setup_logger() -> logging.Logger:
     return logging.getLogger("access")
 
 
+logger = setup_logger()
+
+
 class LoggingMiddleware(BaseHTTPMiddleware):
-    """Custom middleware to log HTTP requests similar to morgan's combined format"""
+    """Custom middleware to log HTTP requests"""
     
     def __init__(self, app, logger: logging.Logger):
         super().__init__(app)

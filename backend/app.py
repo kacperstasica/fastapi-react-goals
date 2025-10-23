@@ -5,10 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from database import connect_db, disconnect_db
 from routes import router
-from logging_config import setup_logger, LoggingMiddleware
-
-
-logger = setup_logger()
+from logging_config import logger, LoggingMiddleware
 
 
 @asynccontextmanager

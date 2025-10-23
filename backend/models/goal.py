@@ -4,7 +4,6 @@ from pydantic import BaseModel, field_validator
 
 
 class GoalCreate(BaseModel):
-    """Schema for creating a new goal"""
     text: str
     
     @field_validator('text')
@@ -23,7 +22,6 @@ class GoalCreate(BaseModel):
 
 
 class GoalResponse(BaseModel):
-    """Schema for goal response"""
     id: str
     text: str
 

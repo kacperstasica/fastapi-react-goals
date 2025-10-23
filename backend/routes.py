@@ -1,15 +1,12 @@
-import logging
-
 from bson import ObjectId
 from fastapi import APIRouter, Depends, HTTPException, status
 from motor.core import AgnosticDatabase
 
 from models.goal import GoalCreate
-from dependencies import get_valid_object_id
-from database import get_db
+from dependencies import get_valid_object_id, get_db
+from logging_config import logger
 
 
-logger = logging.getLogger("access")
 router = APIRouter()
 
 
@@ -90,4 +87,3 @@ async def delete_goal(id: ObjectId = Depends(get_valid_object_id), db: AgnosticD
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to delete goal."
         )
-
