@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: goals-mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - goals-network
+
+  backend:
+    build: ./backend
+    container_name: goals-backend
+    environment:
+      MONGO_URI: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongodb:27017/${MONGO_DATABASE}?authSource=admin
+    ports:
+      - "80:80"
+    depends_on:
+      - mongodb
+    networks:
+      - goals-network
+    volumes:
+      - ./backend/logs:/app/logs  # Persist logs on host
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost}
+    container_name: goals-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - goals-network
+
+networks:
+  goals-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+    driver: local
+
