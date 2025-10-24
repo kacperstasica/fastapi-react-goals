@@ -1,6 +1,7 @@
 from bson import ObjectId
 from fastapi import APIRouter, Depends, HTTPException, status
 from motor.core import AgnosticDatabase
+from pymongo.errors import DuplicateKeyError
 
 from models.goal import GoalCreate
 from dependencies import get_valid_object_id, get_db
@@ -58,6 +59,13 @@ async def create_goal(
                 "text": goal.text
             }
         }
+    
+    except DuplicateKeyError:
+        logger.warning(f"DUPLICATE GOAL ATTEMPT: {goal.text}")
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=f"Goal '{goal.text}' already exists. Please add a different goal."
+        )
     
     except Exception as err:
         logger.error("ERROR SAVING GOAL")

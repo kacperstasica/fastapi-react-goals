@@ -27,6 +27,16 @@ function App() {
   }, [request]);
 
   async function addGoalHandler(goalText) {
+    const isDuplicate = loadedGoals.some(
+      (goal) => goal.text.toLowerCase().trim() === goalText.toLowerCase().trim()
+    );
+
+    if (isDuplicate) {
+      return {
+        error: 'This goal already exists! Try adding a different one.'
+      };
+    }
+
     try {
       const data = await request('/goals', {
         method: 'POST',
@@ -41,6 +51,7 @@ function App() {
           },
           ...prevGoals,
         ]);
+        return { success: true };
       }
     } catch (err) {
       // Error is already handled by useApi hook

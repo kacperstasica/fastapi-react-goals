@@ -17,6 +17,7 @@ services:
     container_name: goals-backend
     environment:
       MONGO_URI: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongodb:27017/${MONGO_DATABASE}?authSource=admin
+      MONGO_DATABASE: ${MONGO_DATABASE}
     ports:
       - "80:80"
     depends_on:

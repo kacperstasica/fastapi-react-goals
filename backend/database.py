@@ -18,6 +18,10 @@ async def connect_db(app: FastAPI) -> None:
         
         app.state.mongo_client = AsyncIOMotorClient(mongo_uri)
         app.state.db = app.state.mongo_client[database_name]
+        
+        goals_collection = app.state.db["goals"]
+        await goals_collection.create_index("text", unique=True)
+        
         logger.info(f"CONNECTED TO MONGODB: {database_name}")
     except Exception as err:
         logger.error("FAILED TO CONNECT TO MONGODB")

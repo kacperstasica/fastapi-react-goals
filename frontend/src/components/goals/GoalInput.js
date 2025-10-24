@@ -14,7 +14,7 @@ function GoalInput(props) {
     }
   }
 
-  function goalSubmitHandler(event) {
+  async function goalSubmitHandler(event) {
     event.preventDefault();
 
     if (enteredGoalText.trim().length === 0) {
@@ -22,9 +22,17 @@ function GoalInput(props) {
       return;
     }
 
-    props.onAddGoal(enteredGoalText);
-    setEnteredGoalText('');
-    setValidationError('');
+    const result = await props.onAddGoal(enteredGoalText);
+    
+    if (result?.error) {
+      setValidationError(result.error);
+      return;
+    }
+
+    if (result?.success) {
+      setEnteredGoalText('');
+      setValidationError('');
+    }
   }
 
   return (
@@ -39,9 +47,9 @@ function GoalInput(props) {
             onChange={updateGoalTextHandler}
           />
           {validationError && (
-            <p style={{ color: 'red', marginTop: '0.5rem' }}>
-              {validationError}
-            </p>
+            <div className="validation-warning">
+              ⚠️ {validationError}
+            </div>
           )}
           <button>Add Goal</button>
         </form>
