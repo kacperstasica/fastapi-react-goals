@@ -1,4 +1,5 @@
-version: '3.8'
+volumes:
+  mongodb_data:
 
 services:
   mongodb:
@@ -9,8 +10,6 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
     volumes:
       - mongodb_data:/data/db
-    networks:
-      - goals-network
 
   backend:
     build: ./backend
@@ -22,8 +21,6 @@ services:
       - "80:80"
     depends_on:
       - mongodb
-    networks:
-      - goals-network
     volumes:
       - ./backend/logs:/app/logs  # Persist logs on host
 
@@ -37,14 +34,3 @@ services:
       - "3000:3000"
     depends_on:
       - backend
-    networks:
-      - goals-network
-
-networks:
-  goals-network:
-    driver: bridge
-
-volumes:
-  mongodb_data:
-    driver: local
-
