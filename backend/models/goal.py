@@ -33,3 +33,40 @@ class GoalResponse(BaseModel):
             }
         }
 
+
+class GoalsListResponse(BaseModel):
+    goals: list[GoalResponse]
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "goals": [
+                    {"id": "507f1f77bcf86cd799439011", "text": "Learn FastAPI"},
+                    {"id": "507f1f77bcf86cd799439012", "text": "Build an API"}
+                ]
+            }
+        }
+
+
+class GoalCreateResponse(BaseModel):
+    message: str
+    goal: GoalResponse
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "message": "Goal saved",
+                "goal": {"id": "507f1f77bcf86cd799439011", "text": "Learn FastAPI"}
+            }
+        }
+
+
+class MessageResponse(BaseModel):
+    message: str
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "message": "Deleted goal!"
+            }
+        }
